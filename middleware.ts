@@ -12,6 +12,14 @@ export async function middleware(request: NextRequest) {
   const sessionCookie = request.cookies.get('session');
   const isProtectedRoute = pathname.startsWith(protectedRoutes);
 
+  if (
+    request.method === 'POST' &&
+    pathname === '/sign-up' &&
+    !request.headers.get('next-action')
+  ) {
+    return NextResponse.rewrite(new URL('/api/sign-up', request.url));
+  }
+
   if (isProtectedRoute && !sessionCookie) {
     return NextResponse.redirect(new URL('/sign-in', request.url));
   }

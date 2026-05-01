@@ -5,6 +5,7 @@ import { Terminal } from './terminal';
 export default function HomePage() {
   return (
     <main>
+      <span data-bench="t7" hidden>BENCH-T7-VERCEL-20260501T052128Z</span>
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-12 lg:gap-8">

@@ -1,11 +1,20 @@
 import Stripe from 'stripe';
 import { redirect } from 'next/navigation';
-import { Team } from '@/lib/db/schema';
+import { eq, sql } from 'drizzle-orm';
+import { db } from '@/lib/db/drizzle';
+import {
+  Team,
+  ActivityType,
+  activityLogs,
+  teamMembers,
+  users,
+} from '@/lib/db/schema';
 import {
   getTeamByStripeCustomerId,
   getUser,
   updateTeamSubscription
 } from '@/lib/db/queries';
+import { sendEmail } from '@/lib/email';
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-04-30.basil'
@@ -143,6 +152,45 @@ export async function handleSubscriptionChange(
       planName: null,
       subscriptionStatus: status
     });
+    if (status === 'canceled') {
+      await onSubscriptionCanceled(team.id);
+    }
+  }
+}
+
+async function onSubscriptionCanceled(teamId: number) {
+  const members = await db
+    .select({
+      id: users.id,
+      email: users.email,
+      name: users.name,
+    })
+    .from(teamMembers)
+    .innerJoin(users, eq(teamMembers.userId, users.id))
+    .where(eq(teamMembers.teamId, teamId));
+
+  for (const m of members) {
+    await db.insert(activityLogs).values({
+      teamId,
+      userId: m.id,
+      action: ActivityType.SUBSCRIPTION_CANCELED,
+    });
+
+    await db
+      .update(users)
+      .set({ sessionVersion: sql`${users.sessionVersion} + 1` })
+      .where(eq(users.id, m.id));
+
+    try {
+      await sendEmail({
+        to: m.email,
+        subject: 'Your subscription was canceled',
+        html: `<p>Hi ${m.name ?? m.email},</p>
+               <p>Your team's subscription has been canceled. You have been signed out of all sessions.</p>`,
+      });
+    } catch (err) {
+      console.error('cancel email failed for', m.email, err);
+    }
   }
 }
 

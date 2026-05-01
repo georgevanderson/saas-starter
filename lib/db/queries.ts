@@ -33,6 +33,10 @@ export async function getUser() {
     return null;
   }
 
+  if (user[0].sessionVersion !== sessionData.user.sessionVersion) {
+    return null;
+  }
+
   return user[0];
 }
 

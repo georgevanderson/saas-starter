@@ -17,6 +17,8 @@ export const users = pgTable('users', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
   deletedAt: timestamp('deleted_at'),
+  avatarUrl: text('avatar_url'),
+  sessionVersion: integer('session_version').notNull().default(1),
 });
 
 export const teams = pgTable('teams', {
@@ -135,8 +137,10 @@ export enum ActivityType {
   UPDATE_PASSWORD = 'UPDATE_PASSWORD',
   DELETE_ACCOUNT = 'DELETE_ACCOUNT',
   UPDATE_ACCOUNT = 'UPDATE_ACCOUNT',
+  UPDATE_AVATAR = 'UPDATE_AVATAR',
   CREATE_TEAM = 'CREATE_TEAM',
   REMOVE_TEAM_MEMBER = 'REMOVE_TEAM_MEMBER',
   INVITE_TEAM_MEMBER = 'INVITE_TEAM_MEMBER',
   ACCEPT_INVITATION = 'ACCEPT_INVITATION',
+  SUBSCRIPTION_CANCELED = 'subscription_canceled',
 }

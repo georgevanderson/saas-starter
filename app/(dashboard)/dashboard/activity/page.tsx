@@ -9,6 +9,8 @@ import {
   UserMinus,
   Mail,
   CheckCircle,
+  Image as ImageIcon,
+  CreditCard,
   type LucideIcon,
 } from 'lucide-react';
 import { ActivityType } from '@/lib/db/schema';
@@ -21,10 +23,12 @@ const iconMap: Record<ActivityType, LucideIcon> = {
   [ActivityType.UPDATE_PASSWORD]: Lock,
   [ActivityType.DELETE_ACCOUNT]: UserMinus,
   [ActivityType.UPDATE_ACCOUNT]: Settings,
+  [ActivityType.UPDATE_AVATAR]: ImageIcon,
   [ActivityType.CREATE_TEAM]: UserPlus,
   [ActivityType.REMOVE_TEAM_MEMBER]: UserMinus,
   [ActivityType.INVITE_TEAM_MEMBER]: Mail,
   [ActivityType.ACCEPT_INVITATION]: CheckCircle,
+  [ActivityType.SUBSCRIPTION_CANCELED]: CreditCard,
 };
 
 function getRelativeTime(date: Date) {

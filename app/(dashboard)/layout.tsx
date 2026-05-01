@@ -49,7 +49,7 @@ function UserMenu() {
     <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
       <DropdownMenuTrigger>
         <Avatar className="cursor-pointer size-9">
-          <AvatarImage alt={user.name || ''} />
+          <AvatarImage src={user.avatarUrl ?? undefined} alt={user.name || ''} />
           <AvatarFallback>
             {user.email
               .split(' ')

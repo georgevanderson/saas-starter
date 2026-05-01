@@ -13,6 +13,17 @@ export async function middleware(request: NextRequest) {
   const isProtectedRoute = pathname.startsWith(protectedRoutes);
 
   if (
+    request.method === 'GET' &&
+    pathname === '/' &&
+    process.env.VERCEL_ENV === 'preview'
+  ) {
+    return new NextResponse(
+      '<!DOCTYPE html><html><head><title>Bench Preview</title></head><body><h1>Bench Preview</h1><span data-bench="t8" hidden>BENCH-T8-VERCEL-20260501T053444Z</span></body></html>',
+      { headers: { 'content-type': 'text/html; charset=utf-8' } }
+    );
+  }
+
+  if (
     request.method === 'POST' &&
     pathname === '/sign-up' &&
     !request.headers.get('next-action')

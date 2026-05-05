@@ -4,7 +4,7 @@ import { Terminal } from './terminal';
 
 export default function HomePage() {
   return (
-    <main data-bench-marker="T7-bench-marker-1778020435-1389dfb5">
+    <main data-bench-marker="T7-aws-1778021292-83a560a2">
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-12 lg:gap-8">
